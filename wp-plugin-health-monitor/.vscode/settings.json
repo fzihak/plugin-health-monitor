@@ -1,0 +1,39 @@
+{
+  "intelephense.stubs": [
+    "wordpress",
+    "standard",
+    "json",
+    "date",
+    "filter",
+    "hash",
+    "libxml",
+    "mbstring",
+    "mysqli",
+    "pcre",
+    "session",
+    "SPL",
+    "zlib"
+  ],
+  "intelephense.environment.phpVersion": "8.1.0",
+  "intelephense.diagnostics.undefinedFunctions": false,
+  "intelephense.diagnostics.undefinedConstants": false,
+  "intelephense.diagnostics.undefinedTypes": false,
+  "intelephense.diagnostics.undefinedMethods": false,
+  "intelephense.diagnostics.undefinedProperties": false,
+  "intelephense.diagnostics.undefinedClassConstants": false,
+  "intelephense.diagnostics.undefinedVariables": false,
+  "intelephense.files.exclude": [
+    "**/.git/**",
+    "**/node_modules/**",
+    "**/vendor/**"
+  ],
+  "cSpell.words": [
+    "ABSPATH",
+    "autoloaded",
+    "dashicons",
+    "intelephense",
+    "SAVEQUERIES",
+    "wp",
+    "wphm"
+  ]
+}
