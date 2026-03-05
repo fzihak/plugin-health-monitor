@@ -1,0 +1,25 @@
+# IDE & Editor
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+
+# WordPress
+wp-content/debug.log
+*.log
+
+# Dependencies
+/vendor/
+/node_modules/
+
+# Build artifacts
+*.zip
+*.tar.gz
+
+# Environment
+.env
+.env.*
