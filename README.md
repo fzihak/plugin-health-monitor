@@ -81,24 +81,6 @@ Scripts load twice. Hooks collide. Deprecated functions throw warnings. PHP vers
 
 ---
 
-## Screenshots
-
-| Dashboard | Conflicts |
-|---|---|
-| Overall Health Score and module summary | Duplicate handles and hook collisions |
-
-| Performance | PHP Compatibility |
-|---|---|
-| Asset count, DB queries, autoload bloat | Per-plugin PHP requirements vs. server |
-
-| Debug Log | Health Report |
-|---|---|
-| Log entries grouped by plugin and severity | Full report — export JSON/TXT or print PDF |
-
-> Screenshots will be added to the WordPress.org plugin page upon approval.
-
----
-
 ## Requirements
 
 | | Minimum |
