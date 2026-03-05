@@ -19,9 +19,9 @@
       --bg-hover: #16161f;
       --border: #1e1e2e;
       --border-light: #252535;
-      --text: #e2e2f0;
-      --text-muted: #7070a0;
-      --text-dim: #4a4a6a;
+      --text: #f2f2ff;
+      --text-muted: #a8a8cc;
+      --text-dim: #6868a0;
       --accent: #6366f1;
       --accent-light: #818cf8;
       --accent-glow: rgba(99,102,241,0.15);
@@ -570,8 +570,8 @@
     <a class="header-link" href="https://github.com/fzihak/plugin-health-monitor" target="_blank">
       ★ GitHub
     </a>
-    <a class="header-link primary" href="https://github.com/fzihak/plugin-health-monitor/releases" target="_blank">
-      ↓ Download
+    <a class="header-link primary" href="https://github.com/fzihak/plugin-health-monitor/releases/download/v1.0.0/wp-plugin-health-monitor.zip" target="_blank">
+      ↓ Download v1.0.0
     </a>
   </div>
 </header>
@@ -668,28 +668,28 @@
   <div class="section">
     <h2><span class="section-icon">🖼</span>Screenshots</h2>
     <div class="screenshot-gallery">
-      <div class="screenshot-item" onclick="openLightbox('../screenshots/dashboard.png')">
-        <img src="../screenshots/dashboard.png" alt="Dashboard" loading="lazy" />
+      <div class="screenshot-item" onclick="openLightbox('screenshots/dashboard.png')">
+        <img src="screenshots/dashboard.png" alt="Dashboard" loading="lazy" />
         <div class="screenshot-label">Dashboard — Health Score</div>
       </div>
-      <div class="screenshot-item" onclick="openLightbox('../screenshots/conflicts.png')">
-        <img src="../screenshots/conflicts.png" alt="Conflicts" loading="lazy" />
+      <div class="screenshot-item" onclick="openLightbox('screenshots/conflicts.png')">
+        <img src="screenshots/conflicts.png" alt="Conflicts" loading="lazy" />
         <div class="screenshot-label">Conflicts Detector</div>
       </div>
-      <div class="screenshot-item" onclick="openLightbox('../screenshots/performance.png')">
-        <img src="../screenshots/performance.png" alt="Performance" loading="lazy" />
+      <div class="screenshot-item" onclick="openLightbox('screenshots/performance.png')">
+        <img src="screenshots/performance.png" alt="Performance" loading="lazy" />
         <div class="screenshot-label">Performance Panel</div>
       </div>
-      <div class="screenshot-item" onclick="openLightbox('../screenshots/php-compat.png')">
-        <img src="../screenshots/php-compat.png" alt="PHP Compat" loading="lazy" />
+      <div class="screenshot-item" onclick="openLightbox('screenshots/php-compat.png')">
+        <img src="screenshots/php-compat.png" alt="PHP Compat" loading="lazy" />
         <div class="screenshot-label">PHP Compatibility</div>
       </div>
-      <div class="screenshot-item" onclick="openLightbox('../screenshots/debug-log.png')">
-        <img src="../screenshots/debug-log.png" alt="Debug Log" loading="lazy" />
+      <div class="screenshot-item" onclick="openLightbox('screenshots/debug-log.png')">
+        <img src="screenshots/debug-log.png" alt="Debug Log" loading="lazy" />
         <div class="screenshot-label">Debug Log Analyzer</div>
       </div>
-      <div class="screenshot-item" onclick="openLightbox('../screenshots/report.png')">
-        <img src="../screenshots/report.png" alt="Report" loading="lazy" />
+      <div class="screenshot-item" onclick="openLightbox('screenshots/report.png')">
+        <img src="screenshots/report.png" alt="Report" loading="lazy" />
         <div class="screenshot-label">Health Report</div>
       </div>
     </div>
@@ -715,6 +715,18 @@
 
     <h3>Via WP-CLI</h3>
     <pre><div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div><code class="language-bash">wp plugin install wp-plugin-health-monitor --activate</code></pre>
+
+    <h3>Download</h3>
+    <div class="callout callout-info" style="flex-direction:column;gap:8px;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="callout-icon">↓</span>
+        <a href="https://github.com/fzihak/plugin-health-monitor/releases/download/v1.0.0/wp-plugin-health-monitor.zip" style="color:#818cf8;font-weight:600;font-size:13px;">wp-plugin-health-monitor.zip</a>
+        <span style="color:#6868a0;font-size:12px;">v1.0.0</span>
+      </div>
+      <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:#6868a0;word-break:break-all;">
+        SHA256: <span style="color:#a8a8cc;">5837ddfb134a8ac34a54df1098c155e19897ec10cd874318df70e11dbe50e69e</span>
+      </div>
+    </div>
 
     <h3>Server Requirements</h3>
     <div class="table-wrap">
