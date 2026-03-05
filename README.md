@@ -11,11 +11,16 @@
 
 <br>
 
-[![WordPress](https://img.shields.io/badge/WordPress-6.3%2B-21759B?style=for-the-badge&logo=wordpress&logoColor=white)](https://wordpress.org)
+[![WordPress](https://img.shields.io/badge/WordPress-6.3%2B-21759B?style=for-the-badge&logo=wordpress&logoColor=white)](https://wordpress.org/plugins/health-radar/)
 [![PHP](https://img.shields.io/badge/PHP-8.1%2B-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://php.net)
 [![License](https://img.shields.io/badge/License-GPL%20v2%2B-22c55e?style=for-the-badge)](https://www.gnu.org/licenses/gpl-2.0.html)
 [![WP-CLI](https://img.shields.io/badge/WP--CLI-Supported-3b82f6?style=for-the-badge)](https://wp-cli.org)
-[![Version](https://img.shields.io/badge/Version-1.0.0-f59e0b?style=for-the-badge)](../../releases)
+[![Plugin Check](https://img.shields.io/badge/Plugin%20Check-PASS-16a34a?style=for-the-badge)](https://wordpress.org/plugins/plugin-check/)
+[![Version](https://img.shields.io/badge/Version-1.0.0-f59e0b?style=for-the-badge)](../../releases/tag/v1.0.0)
+
+<br>
+
+[📖 Documentation](https://fzihak.github.io/plugin-health-monitor/) &nbsp;·&nbsp; [🔌 WordPress.org](https://wordpress.org/plugins/health-radar/) &nbsp;·&nbsp; [🐛 Report a Bug](../../issues) &nbsp;·&nbsp; [💡 Request a Feature](../../issues)
 
 <br>
 
@@ -78,44 +83,19 @@ Scripts load twice. Hooks collide. Deprecated functions throw warnings. PHP vers
 
 ## Screenshots
 
-<table>
-<tr>
-<td align="center" width="50%">
-<b>Dashboard</b><br>
-<sub>Overall Health Score and module summary</sub><br><br>
-<img src="screenshots/dashboard.png" alt="Dashboard" width="100%">
-</td>
-<td align="center" width="50%">
-<b>Conflicts</b><br>
-<sub>Duplicate script handles and hook collisions</sub><br><br>
-<img src="screenshots/conflicts.png" alt="Conflicts" width="100%">
-</td>
-</tr>
-<tr>
-<td align="center">
-<b>Performance</b><br>
-<sub>Asset count, payload size, DB queries, autoload size</sub><br><br>
-<img src="screenshots/performance.png" alt="Performance" width="100%">
-</td>
-<td align="center">
-<b>PHP Compatibility</b><br>
-<sub>Per-plugin PHP requirements vs. your server</sub><br><br>
-<img src="screenshots/php-compat.png" alt="PHP Compatibility" width="100%">
-</td>
-</tr>
-<tr>
-<td align="center">
-<b>Debug Log</b><br>
-<sub>Log entries grouped by plugin and error type</sub><br><br>
-<img src="screenshots/debug-log.png" alt="Debug Log" width="100%">
-</td>
-<td align="center">
-<b>Health Report</b><br>
-<sub>Full single-page report, printable to PDF</sub><br><br>
-<img src="screenshots/report.png" alt="Report" width="100%">
-</td>
-</tr>
-</table>
+| Dashboard | Conflicts |
+|---|---|
+| Overall Health Score and module summary | Duplicate handles and hook collisions |
+
+| Performance | PHP Compatibility |
+|---|---|
+| Asset count, DB queries, autoload bloat | Per-plugin PHP requirements vs. server |
+
+| Debug Log | Health Report |
+|---|---|
+| Log entries grouped by plugin and severity | Full report — export JSON/TXT or print PDF |
+
+> Screenshots will be added to the WordPress.org plugin page upon approval.
 
 ---
 
@@ -203,14 +183,17 @@ wp healthmonitor log --last=50
 
 ## How the Health Score Works
 
-The score is calculated from **four weighted factors**, totaling 100 points.
+The score is a weighted aggregate across **five dimensions**, totaling 100 points.
 
-| Factor | Weight | Scoring |
+| Dimension | Weight | Description |
 |---|---|---|
-| Plugin count | 30 pts | ≤10 = 30 · 11–20 = 20 · 21+ = 10 |
-| Enqueued assets | 30 pts | ≤15 = 30 · 16–30 = 20 · 31+ = 10 |
-| Database queries | 20 pts | ≤30 = 20 · 31–60 = 10 · 61+ = 5 |
-| Autoloaded options | 20 pts | <1 MB = 20 · 1–3 MB = 10 · >3 MB = 5 |
+| Conflict score | 20 pts | Hook collisions and duplicate script/style handles |
+| Performance score | 25 pts | Asset count, estimated payload, DB queries, autoload size |
+| PHP compatibility score | 20 pts | Incompatible plugins and deprecated function usage |
+| Debug log score | 20 pts | Error frequency and severity in `debug.log` |
+| Asset health score | 15 pts | Duplicate fingerprinted JS/CSS files |
+
+A score of **80+** is considered healthy. Below **50** indicates significant issues requiring attention.
 
 ---
 
@@ -218,11 +201,12 @@ The score is calculated from **four weighted factors**, totaling 100 points.
 
 > This plugin was built with security-first principles throughout.
 
+- All file reads use `WP_Filesystem` — no direct `fopen`/`fread` calls
 - All AJAX handlers verify nonces via `check_ajax_referer()`
 - All admin pages enforce `manage_options` capability check
 - All output escaped with `esc_html()`, `esc_attr()`, and `esc_url()`
 - All database queries use `$wpdb->prepare()`
-- File reads validate paths with `realpath()` before any operation
+- Autoload query result cached with `wp_cache_get/set` to avoid redundant DB hits
 - Zero external HTTP requests — ever
 
 ---
@@ -251,19 +235,19 @@ All PHP must follow [WordPress Coding Standards](https://developer.wordpress.org
 
 ## Changelog
 
-<details>
-<summary><b>v1.0.0 — Initial Release</b></summary>
-<br>
+### [1.0.0] — 2026-03-05
 
-- Plugin Conflict Detector
-- Performance Insight Panel
-- PHP Compatibility Checker
-- Debug Log Analyzer
-- Duplicate Asset Detector
-- Health Report Generator
-- Full WP-CLI command suite
+**Initial public release.**
 
-</details>
+- 🔍 Plugin Conflict Detector — hook collisions + duplicate script/style handles
+- ⚡ Performance Insight Panel — DB queries, asset count, autoload size, 0–100 Health Score
+- 🐘 PHP Compatibility Checker — per-plugin PHP validation + deprecated function scan
+- 📋 Debug Log Analyzer — fatal/warning/notice grouping by top-offending plugin
+- 🧬 Duplicate Asset Detector — md5 fingerprinting across JS/CSS handles
+- 📄 Health Report Generator — JSON/TXT download + print-to-PDF
+- 🖥️ Full WP-CLI command suite (`scan`, `score`, `conflicts`, `report`, `log`)
+- Custom radar SVG admin menu icon
+- Automated Plugin Check scan: ✅ PASS
 
 ---
 
