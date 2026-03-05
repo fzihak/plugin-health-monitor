@@ -273,13 +273,13 @@ Aggregates all module results into a single-page report containing:
 - PHP compatibility summary
 - Debug log summary
 
-**Export to PDF:**
-Click **Print Report** (or press `Ctrl+P` / `Cmd+P`). The page includes a print stylesheet that produces a clean, formatted PDF via the browser's native print dialog.
+**Export options:**
 
-**Export to JSON via WP-CLI:**
-```bash
-wp healthmonitor report --format=json
-```
+| Format | How |
+|---|---|
+| **JSON** | Click **Download JSON** in the admin, or `wp healthmonitor report --format=json` |
+| **Plain Text** | Click **Download TXT** in the admin — line-delimited plain text, no HTML |
+| **PDF** | Click **Print Report** (Ctrl+P / Cmd+P) — browser native print dialog |
 
 ---
 
@@ -409,6 +409,7 @@ The plugin follows WordPress security best practices throughout.
 
 | Security Measure | Implementation |
 |---|---|
+| File reads | `WP_Filesystem` — no direct `fopen`/`fread` calls anywhere |
 | AJAX authentication | `check_ajax_referer()` on all AJAX handlers |
 | Capability checks | `current_user_can('manage_options')` on all admin pages and AJAX |
 | Output escaping | `esc_html()`, `esc_attr()`, `esc_url()` on all output |
@@ -416,6 +417,7 @@ The plugin follows WordPress security best practices throughout.
 | File path validation | `realpath()` used before any file read to prevent path traversal |
 | Direct file access | `if ( ! defined('ABSPATH') ) exit;` in every PHP file |
 | External requests | None — zero outbound HTTP requests anywhere in the codebase |
+| Automated audit | Automated Plugin Check scan: ✅ PASS (March 2026) |
 
 ---
 
@@ -512,6 +514,6 @@ Translation files go in the `languages/` directory. Follows standard WordPress i
 
 **Health Radar v1.0.0**
 
-[GitHub](https://github.com/fzihak/plugin-health-monitor) · Built by [Foysal Zihak](https://github.com/fzihak)
+[GitHub](https://github.com/fzihak/plugin-health-monitor) · [WordPress.org](https://wordpress.org/plugins/health-radar/) · Built by [Foysal Zihak](https://github.com/fzihak)
 
 </div>

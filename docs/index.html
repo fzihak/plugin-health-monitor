@@ -567,10 +567,13 @@
     </div>
   </div>
   <div class="header-links">
+    <a class="header-link" href="https://wordpress.org/plugins/health-radar/" target="_blank">
+      🔌 WordPress.org
+    </a>
     <a class="header-link" href="https://github.com/fzihak/plugin-health-monitor" target="_blank">
       ★ GitHub
     </a>
-    <a class="header-link primary" href="https://github.com/fzihak/plugin-health-monitor/releases/download/v1.0.0/wp-plugin-health-monitor.zip" target="_blank">
+    <a class="header-link primary" href="https://github.com/fzihak/plugin-health-monitor/releases/download/v1.0.0/health-radar.zip" target="_blank">
       ↓ Download v1.0.0
     </a>
   </div>
@@ -617,6 +620,7 @@
       <span class="badge badge-purple">PHP 8.1+</span>
       <span class="badge badge-green">GPL v2+</span>
       <span class="badge badge-yellow">WP-CLI Supported</span>
+      <span class="badge badge-green">Plugin Check ✓ PASS</span>
     </div>
   </div>
 
@@ -708,19 +712,19 @@
 
     <h3>Manual Upload</h3>
     <ol class="steps">
-      <li><span class="step-num">1</span>Download <code>wp-plugin-health-monitor.zip</code> from the <a href="https://github.com/fzihak/plugin-health-monitor/releases" target="_blank" style="color:var(--accent-light)">Releases page</a></li>
+      <li><span class="step-num">1</span>Download <code>health-radar.zip</code> from the <a href="https://github.com/fzihak/plugin-health-monitor/releases" target="_blank" style="color:var(--accent-light)">Releases page</a></li>
       <li><span class="step-num">2</span>Go to <strong>Plugins → Add New Plugin → Upload Plugin</strong></li>
       <li><span class="step-num">3</span>Select the ZIP file → <strong>Install Now</strong> → <strong>Activate Plugin</strong></li>
     </ol>
 
     <h3>Via WP-CLI</h3>
-    <pre><div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div><code class="language-bash">wp plugin install wp-plugin-health-monitor --activate</code></pre>
+    <pre><div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div><code class="language-bash">wp plugin install health-radar --activate</code></pre>
 
     <h3>Download</h3>
     <div class="callout callout-info" style="flex-direction:column;gap:8px;">
       <div style="display:flex;align-items:center;gap:8px;">
         <span class="callout-icon">↓</span>
-        <a href="https://github.com/fzihak/plugin-health-monitor/releases/download/v1.0.0/wp-plugin-health-monitor.zip" style="color:#818cf8;font-weight:600;font-size:13px;">wp-plugin-health-monitor.zip</a>
+        <a href="https://github.com/fzihak/plugin-health-monitor/releases/download/v1.0.0/health-radar.zip" style="color:#818cf8;font-weight:600;font-size:13px;">health-radar.zip</a>
         <span style="color:#6868a0;font-size:12px;">v1.0.0</span>
       </div>
       <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:#6868a0;word-break:break-all;">
@@ -763,7 +767,7 @@
       <div class="module-icon-big">📊</div>
       <div>
         <div class="module-title">Dashboard</div>
-        <div class="module-url">/wp-admin/admin.php?page=wp-plugin-health-monitor</div>
+        <div class="module-url">/wp-admin/admin.php?page=wphm-dashboard</div>
         <span class="module-class">WPHM_Health_Scorer</span>
       </div>
     </div>
@@ -963,8 +967,9 @@ define( 'WP_DEBUG_DISPLAY', false );</code></pre>
       <table>
         <thead><tr><th>Format</th><th>How</th></tr></thead>
         <tbody>
-          <tr><td><strong>PDF</strong></td><td>Click <strong>Print Report</strong> (Ctrl+P / Cmd+P) — browser print dialog</td></tr>
-          <tr><td><strong>JSON</strong></td><td><code>wp healthmonitor report --format=json</code></td></tr>
+          <tr><td><strong>JSON</strong></td><td>Click <strong>Download JSON</strong> in the admin, or <code>wp healthmonitor report --format=json</code></td></tr>
+          <tr><td><strong>Plain Text</strong></td><td>Click <strong>Download TXT</strong> in the admin — line-delimited plain text, no HTML</td></tr>
+          <tr><td><strong>PDF</strong></td><td>Click <strong>Print Report</strong> (Ctrl+P / Cmd+P) — browser native print dialog</td></tr>
         </tbody>
       </table>
     </div>
@@ -1119,6 +1124,13 @@ fi</code></pre>
       <div class="security-item">
         <span class="security-check">✓</span>
         <div class="security-text">
+          <strong>WP_Filesystem API</strong>
+          No direct <code>fopen</code>/<code>fread</code> — all file reads via WP_Filesystem
+        </div>
+      </div>
+      <div class="security-item">
+        <span class="security-check">✓</span>
+        <div class="security-text">
           <strong>Path validation</strong>
           <code>realpath()</code> before any file read to prevent path traversal
         </div>
@@ -1128,6 +1140,13 @@ fi</code></pre>
         <div class="security-text">
           <strong>Direct access blocked</strong>
           <code>ABSPATH</code> guard in every PHP file
+        </div>
+      </div>
+      <div class="security-item">
+        <span class="security-check">✓</span>
+        <div class="security-text">
+          <strong>Zero external requests</strong>
+          No outbound HTTP calls — all data stays on your server
         </div>
       </div>
     </div>
@@ -1211,7 +1230,7 @@ fi</code></pre>
           <tr><td><code>WPHM_VERSION</code></td><td><code>1.0.0</code></td></tr>
           <tr><td><code>WPHM_PLUGIN_DIR</code></td><td>Absolute path to plugin directory (trailing slash)</td></tr>
           <tr><td><code>WPHM_PLUGIN_URL</code></td><td>URL to plugin directory (trailing slash)</td></tr>
-          <tr><td><code>WPHM_PLUGIN_BASENAME</code></td><td><code>wp-plugin-health-monitor/wp-plugin-health-monitor.php</code></td></tr>
+          <tr><td><code>WPHM_PLUGIN_BASENAME</code></td><td><code>health-radar/health-radar.php</code></td></tr>
           <tr><td><code>WPHM_MIN_PHP</code></td><td><code>8.1</code></td></tr>
         </tbody>
       </table>
@@ -1268,12 +1287,12 @@ fi</code></pre>
     </div>
 
     <h3>Text Domain</h3>
-    <pre><div class="code-header"><span class="code-lang">text</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div><code>wp-plugin-health-monitor</code></pre>
+    <pre><div class="code-header"><span class="code-lang">text</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div><code>health-radar</code></pre>
     <p>Translation files go in the <code>languages/</code> directory. Follows standard WordPress i18n conventions using <code>__()</code>, <code>esc_html__()</code>, and <code>_e()</code>.</p>
   </div>
 
   <footer>
-    <p>Health Radar v1.0.0 · Built by <a href="https://github.com/fzihak" target="_blank">Foysal Zihak</a> · <a href="https://github.com/fzihak/plugin-health-monitor" target="_blank">GitHub</a> · <a href="https://www.gnu.org/licenses/gpl-2.0.html" target="_blank">GPL v2+</a></p>
+    <p>Health Radar v1.0.0 · Built by <a href="https://github.com/fzihak" target="_blank">Foysal Zihak</a> · <a href="https://github.com/fzihak/plugin-health-monitor" target="_blank">GitHub</a> · <a href="https://wordpress.org/plugins/health-radar/" target="_blank">WordPress.org</a> · <a href="https://www.gnu.org/licenses/gpl-2.0.html" target="_blank">GPL v2+</a></p>
   </footer>
 
 </div>
