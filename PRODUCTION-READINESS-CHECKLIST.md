@@ -1,4 +1,4 @@
-# WP Plugin Health Monitor — Production Readiness Checklist (v1)
+# Health Radar — Production Readiness Checklist (v1)
 
 Use this checklist before each public release.
 

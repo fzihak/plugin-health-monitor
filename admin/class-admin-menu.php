@@ -3,7 +3,7 @@
  * Admin Menu class.
  *
  * Registers all admin menu pages, enqueues assets, and handles AJAX endpoints
- * for the WP Plugin Health Monitor.
+ * for the Health Radar.
  *
  * @package WP_Plugin_Health_Monitor
  */
@@ -67,8 +67,8 @@ class WPHM_Admin_Menu {
 	 */
 	public function add_menu_pages(): void {
 		add_menu_page(
-			__( 'Plugin Health Monitor', 'wp-plugin-health-monitor' ),
-			__( 'Health Monitor', 'wp-plugin-health-monitor' ),
+			__( 'Health Radar', 'wp-plugin-health-monitor' ),
+			__( 'Health Radar', 'wp-plugin-health-monitor' ),
 			self::CAPABILITY,
 			self::MENU_SLUG,
 			array( $this, 'render_dashboard' ),

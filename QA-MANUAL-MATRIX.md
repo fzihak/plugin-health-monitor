@@ -1,4 +1,4 @@
-# WP Plugin Health Monitor — Manual QA Matrix (v1)
+# Health Radar — Manual QA Matrix (v1)
 
 Use this matrix before release candidate and final release.
 

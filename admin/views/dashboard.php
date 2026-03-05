@@ -123,7 +123,7 @@ $wphm_dimensions = array(
 			</div>
 
 			<div class="wphm-dash__hero-right">
-				<h1 class="wphm-dash__heading"><?php esc_html_e( 'Plugin Health Monitor', 'wp-plugin-health-monitor' ); ?></h1>
+				<h1 class="wphm-dash__heading"><?php esc_html_e( 'Health Radar', 'wp-plugin-health-monitor' ); ?></h1>
 				<p class="wphm-dash__subheading"><?php esc_html_e( 'Real-time overview of your WordPress plugin ecosystem health.', 'wp-plugin-health-monitor' ); ?></p>
 
 				<!-- Dimension Bars -->

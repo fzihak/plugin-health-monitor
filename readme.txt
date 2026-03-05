@@ -1,4 +1,4 @@
-=== WP Plugin Health Monitor ===
+=== Health Radar ===
 Contributors: fzihak
 Tags: plugins, health, conflicts, performance, debug
 Requires at least: 6.3
@@ -12,7 +12,7 @@ Pinpoint plugin conflicts, performance issues, PHP compat problems, and debug lo
 
 == Description ==
 
-WP Plugin Health Monitor gives WordPress administrators a clear picture of their site's plugin health. Stop guessing which plugin is causing problems — get actionable insights from your own dashboard.
+Health Radar gives WordPress administrators a clear picture of their site's plugin health. Stop guessing which plugin is causing problems — get actionable insights from your own dashboard.
 
 **Features:**
 
@@ -40,7 +40,7 @@ This plugin makes no external HTTP requests. All data stays on your server. No t
 
 1. Upload the `wp-plugin-health-monitor` folder to `/wp-content/plugins/`.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
-3. Navigate to **Health Monitor** in the admin sidebar.
+3. Navigate to **Health Radar** in the admin sidebar.
 4. Click **Run Full Scan** to generate your first health report.
 
 == Frequently Asked Questions ==

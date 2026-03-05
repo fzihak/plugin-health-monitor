@@ -2,7 +2,7 @@
 
 <br>
 
-# WP Plugin Health Monitor — Documentation
+# Health Radar — Documentation
 
 **Version 1.0.0 · WordPress 6.3+ · PHP 8.1+**
 
@@ -34,7 +34,7 @@
 
 ## 1. Overview
 
-WP Plugin Health Monitor is a diagnostic plugin for WordPress site administrators and developers. It audits your installed plugins across six dimensions and surfaces problems before they reach end users.
+Health Radar is a diagnostic plugin for WordPress site administrators and developers. It audits your installed plugins across six dimensions and surfaces problems before they reach end users.
 
 **What it detects:**
 
@@ -60,7 +60,7 @@ WP Plugin Health Monitor is a diagnostic plugin for WordPress site administrator
 ### From the WordPress Dashboard
 
 1. Go to **Plugins → Add New Plugin**
-2. Search for `WP Plugin Health Monitor`
+2. Search for `Health Radar`
 3. Click **Install Now**, then **Activate**
 
 ### Manual Upload
@@ -91,8 +91,8 @@ wp plugin install wp-plugin-health-monitor --activate
 
 After activation:
 
-1. A **Health Monitor** menu item appears in the WordPress admin sidebar
-2. Navigate to **Health Monitor → Dashboard**
+1. A **Health Radar** menu item appears in the WordPress admin sidebar
+2. Navigate to **Health Radar → Dashboard**
 3. Click **Run Full Scan** to generate your first health report
 4. Review your Health Score and navigate to each module for detailed findings
 
@@ -421,7 +421,7 @@ The plugin follows WordPress security best practices throughout.
 
 ## 9. Privacy
 
-WP Plugin Health Monitor does not collect, transmit, or store any data outside of the WordPress site it is installed on.
+Health Radar does not collect, transmit, or store any data outside of the WordPress site it is installed on.
 
 - No telemetry
 - No usage tracking
@@ -510,7 +510,7 @@ Translation files go in the `languages/` directory. Follows standard WordPress i
 
 <div align="center">
 
-**WP Plugin Health Monitor v1.0.0**
+**Health Radar v1.0.0**
 
 [GitHub](https://github.com/fzihak/plugin-health-monitor) · Built by [Foysal Zihak](https://github.com/fzihak)
 

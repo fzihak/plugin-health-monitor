@@ -2,7 +2,7 @@
 /**
  * WP-CLI Commands class.
  *
- * Registers CLI commands for the WP Plugin Health Monitor.
+ * Registers CLI commands for the Health Radar.
  *
  * @package WP_Plugin_Health_Monitor
  */

@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: WP Plugin Health Monitor
+ * Plugin Name: Health Radar
  * Plugin URI:  https://github.com/fzihak/plugin-health-monitor
  * Description: Helps site admins understand plugin conflicts, performance issues, PHP compatibility problems, and debug log errors — all from within the WordPress admin.
  * Version:     1.0.0
@@ -101,7 +101,7 @@ function wphm_activate() {
 		wp_die(
 			sprintf(
 				/* translators: %s: Minimum PHP version required. */
-				esc_html__( 'WP Plugin Health Monitor requires PHP %s or higher.', 'wp-plugin-health-monitor' ),
+				esc_html__( 'Health Radar requires PHP %s or higher.', 'wp-plugin-health-monitor' ),
 				esc_html( WPHM_MIN_PHP )
 			),
 			esc_html__( 'Plugin Activation Error', 'wp-plugin-health-monitor' ),

@@ -1,6 +1,6 @@
 <?php
 /**
- * Uninstall handler for WP Plugin Health Monitor.
+ * Uninstall handler for Health Radar.
  *
  * Cleans up all options and transients with the wphm_ prefix.
  *
