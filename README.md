@@ -269,6 +269,7 @@ All PHP must follow [WordPress Coding Standards](https://developer.wordpress.org
 - Removed direct loading of `wp-admin/includes/plugin.php`.
 - Refactored path/directory resolution to use WordPress helper-based locations instead of hardcoded internal constants.
 - Updated debug log path handling to use centralized resolver methods.
+- Updated autoload-size SQL handling to use PHPCS-compliant prepared query placeholders.
 
 ### [1.0.0] — 2026-03-05
 

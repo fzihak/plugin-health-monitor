@@ -82,6 +82,7 @@ The DB query count only works when `SAVEQUERIES` is already defined as `true` in
 * Removed direct loading of `wp-admin/includes/plugin.php`.
 * Refactored path/directory resolution to use WordPress helper-based locations instead of hardcoded internal constants.
 * Updated debug log path handling to use centralized resolver methods.
+* Updated autoload-size SQL handling to use PHPCS-compliant prepared query placeholders.
 * Initial release.
 * Plugin Conflict Detector module.
 * Performance Insight Panel module.
