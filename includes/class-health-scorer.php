@@ -197,10 +197,34 @@ class WPHM_Health_Scorer {
 		$cache_key = 'wphm_autoload_size';
 		$result    = wp_cache_get( $cache_key, 'wphm' );
 		if ( false === $result ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-			$result = $wpdb->get_var(
-				"SELECT SUM(LENGTH(option_value)) FROM {$wpdb->options} WHERE autoload = 'yes'"
+			$autoload_values = array( 'yes', 'on' );
+
+			if ( function_exists( 'wp_autoload_values_to_autoload' ) ) {
+				$autoload_values = wp_autoload_values_to_autoload();
+			}
+
+			if ( ! is_array( $autoload_values ) || empty( $autoload_values ) ) {
+				$autoload_values = array( 'yes', 'on' );
+			}
+
+			$autoload_values = array_values(
+				array_filter(
+					array_map( 'strval', $autoload_values ),
+					static function ( $value ) {
+						return '' !== $value;
+					}
+				)
 			);
+
+			$placeholders = implode( ', ', array_fill( 0, count( $autoload_values ), '%s' ) );
+
+			$query = $wpdb->prepare(
+				"SELECT SUM(LENGTH(option_value)) FROM {$wpdb->options} WHERE autoload IN ($placeholders)",
+				$autoload_values
+			);
+
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+			$result = $wpdb->get_var( $query );
 			wp_cache_set( $cache_key, $result, 'wphm', HOUR_IN_SECONDS );
 		}
 
