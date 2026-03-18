@@ -16,11 +16,11 @@
 [![License](https://img.shields.io/badge/License-GPL%20v2%2B-22c55e?style=for-the-badge)](https://www.gnu.org/licenses/gpl-2.0.html)
 [![WP-CLI](https://img.shields.io/badge/WP--CLI-Supported-3b82f6?style=for-the-badge)](https://wp-cli.org)
 [![Plugin Check](https://img.shields.io/badge/Plugin%20Check-PASS-16a34a?style=for-the-badge)](https://wordpress.org/plugins/plugin-check/)
-[![Version](https://img.shields.io/badge/Version-1.0.0-f59e0b?style=for-the-badge)](../../releases/tag/v1.0.0)
+[![Version](https://img.shields.io/badge/Version-1.0.0-f59e0b?style=for-the-badge)](https://github.com/fzihak/plugin-health-monitor/releases/tag/v1.0.0)
 
 <br>
 
-[📖 Documentation](https://fzihak.github.io/plugin-health-monitor/) &nbsp;·&nbsp; [🔌 WordPress.org](https://wordpress.org/plugins/health-radar/) &nbsp;·&nbsp; [🐛 Report a Bug](../../issues) &nbsp;·&nbsp; [💡 Request a Feature](../../issues)
+[📖 Documentation](https://fzihak.github.io/plugin-health-monitor/) &nbsp;·&nbsp; [🔌 WordPress.org](https://wordpress.org/plugins/health-radar/) &nbsp;·&nbsp; [🐛 Report a Bug](https://github.com/fzihak/plugin-health-monitor/issues) &nbsp;·&nbsp; [💡 Request a Feature](https://github.com/fzihak/plugin-health-monitor/issues)
 
 <br>
 
@@ -149,7 +149,7 @@ Scripts load twice. Hooks collide. Deprecated functions throw warnings. PHP vers
 <summary><b>Manual Upload</b></summary>
 <br>
 
-1. Download the latest release from the [Releases](../../releases) page
+1. Download the latest release from the [Releases](https://github.com/fzihak/plugin-health-monitor/releases) page
 2. Upload the `health-radar` folder to `/wp-content/plugins/`
 3. Activate from the **Plugins** screen in WordPress
 
