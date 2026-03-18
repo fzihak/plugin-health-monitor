@@ -77,6 +77,11 @@ The DB query count only works when `SAVEQUERIES` is already defined as `true` in
 == Changelog ==
 
 = 1.0.0 =
+* Review update (March 2026):
+* Removed inline JavaScript redirect from the admin documentation page and replaced it with a standard admin link/button.
+* Removed direct loading of `wp-admin/includes/plugin.php`.
+* Refactored path/directory resolution to use WordPress helper-based locations instead of hardcoded internal constants.
+* Updated debug log path handling to use centralized resolver methods.
 * Initial release.
 * Plugin Conflict Detector module.
 * Performance Insight Panel module.
