@@ -252,8 +252,8 @@ class WPHM_PHP_Checker {
 					continue;
 				}
 
-				$contents = file_get_contents( $file );
-				if ( false === $contents ) {
+				$contents = $this->read_file_contents( $file );
+				if ( '' === $contents ) {
 					continue;
 				}
 
@@ -391,5 +391,28 @@ class WPHM_PHP_Checker {
 	 */
 	private function get_plugins_root_dir(): string {
 		return wp_normalize_path( dirname( untrailingslashit( WPHM_PLUGIN_DIR ) ) );
+	}
+
+	/**
+	 * Read file contents using WP_Filesystem.
+	 *
+	 * @param string $path Absolute file path.
+	 * @return string File content, or empty string on failure.
+	 */
+	private function read_file_contents( string $path ): string {
+		global $wp_filesystem;
+
+		if ( empty( $wp_filesystem ) ) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+			WP_Filesystem();
+		}
+
+		if ( empty( $wp_filesystem ) ) {
+			return '';
+		}
+
+		$content = $wp_filesystem->get_contents( $path );
+
+		return false === $content ? '' : (string) $content;
 	}
 }
