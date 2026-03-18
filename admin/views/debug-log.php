@@ -14,7 +14,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $wphm_debug_active  = defined( 'WP_DEBUG' ) && WP_DEBUG;
 $wphm_log_active    = defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG;
-$wphm_log_exists    = file_exists( WP_CONTENT_DIR . '/debug.log' );
+$wphm_log_reader    = new WPHM_Debug_Log_Reader();
+$wphm_log_path      = $wphm_log_reader->get_log_path();
+$wphm_log_exists    = '' !== $wphm_log_path;
+$wphm_log_expected  = $wphm_log_reader->get_expected_log_path();
 $wphm_display_off   = defined( 'WP_DEBUG_DISPLAY' ) && ! WP_DEBUG_DISPLAY;
 ?>
 <div class="wrap wphm-wrap wphm-page wphm-page--debug-log">
@@ -87,14 +90,14 @@ $wphm_display_off   = defined( 'WP_DEBUG_DISPLAY' ) && ! WP_DEBUG_DISPLAY;
 						<?php if ( $wphm_log_exists ) : ?>
 							<span class="wphm-badge wphm-badge--success"><?php esc_html_e( 'Found', 'health-radar' ); ?></span>
 							<span class="wphm-debug-filesize">
-								<?php echo esc_html( size_format( filesize( WP_CONTENT_DIR . '/debug.log' ), 1 ) ); ?>
+									<?php echo esc_html( size_format( filesize( $wphm_log_path ), 1 ) ); ?>
 							</span>
 						<?php else : ?>
 							<span class="wphm-badge wphm-badge--error"><?php esc_html_e( 'Not Found', 'health-radar' ); ?></span>
 						<?php endif; ?>
 					</td>
 					<td>
-						<code><?php echo esc_html( WP_CONTENT_DIR . '/debug.log' ); ?></code>
+							<code><?php echo esc_html( $wphm_log_exists ? $wphm_log_path : $wphm_log_expected ); ?></code>
 					</td>
 				</tr>
 			</tbody>

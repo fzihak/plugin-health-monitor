@@ -153,7 +153,7 @@ class WPHM_Admin_Menu {
 	/**
 	 * Fallback render callback for the Documentation submenu page.
 	 *
-	 * Redirects via JavaScript immediately after the page renders.
+	 * Renders a link to external documentation.
 	 *
 	 * @return void
 	 */
@@ -163,9 +163,14 @@ class WPHM_Admin_Menu {
 		}
 		?>
 		<div class="wrap">
-			<p><?php esc_html_e( 'Redirecting to documentation…', 'health-radar' ); ?> <a href="https://fzihak.github.io/plugin-health-monitor/"><?php esc_html_e( 'Click here if not redirected.', 'health-radar' ); ?></a></p>
+			<h1><?php esc_html_e( 'Health Radar Documentation', 'health-radar' ); ?></h1>
+			<p><?php esc_html_e( 'Documentation is hosted externally. Use the button below to open it in a new tab.', 'health-radar' ); ?></p>
+			<p>
+				<a class="button button-primary" href="https://fzihak.github.io/plugin-health-monitor/" target="_blank" rel="noopener noreferrer">
+					<?php esc_html_e( 'Open Documentation', 'health-radar' ); ?>
+				</a>
+			</p>
 		</div>
-		<script>window.location.replace( 'https://fzihak.github.io/plugin-health-monitor/' );</script>
 		<?php
 	}
 

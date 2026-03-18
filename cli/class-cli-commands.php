@@ -43,10 +43,6 @@ class WPHM_CLI_Commands {
 	public function scan( array $args, array $assoc_args ): void {
 		WP_CLI::log( __( 'Running full health scan…', 'health-radar' ) );
 
-		if ( ! function_exists( 'get_plugins' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
-		}
-
 		$scorer   = new WPHM_Health_Scorer();
 		$scanner  = new WPHM_Plugin_Scanner();
 		$analyzer = new WPHM_Asset_Analyzer();
@@ -135,10 +131,6 @@ class WPHM_CLI_Commands {
 	 * @return void
 	 */
 	public function report( array $args, array $assoc_args ): void {
-		if ( ! function_exists( 'get_plugins' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
-		}
-
 		$generator = new WPHM_Report_Generator();
 		$report    = $generator->generate( true );
 

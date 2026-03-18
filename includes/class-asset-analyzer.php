@@ -160,9 +160,7 @@ class WPHM_Asset_Analyzer {
 		$filename = '';
 		if ( ! empty( $src ) ) {
 			$filename = basename( wp_parse_url( $src, PHP_URL_PATH ) ?: '' );
-			if ( preg_match( '#/wp-content/plugins/([^/]+)/#', $src, $matches ) ) {
-				$plugin = sanitize_key( $matches[1] );
-			}
+			$plugin   = $this->extract_plugin_slug_from_src( $src );
 		}
 
 		return array(
@@ -218,23 +216,42 @@ class WPHM_Asset_Analyzer {
 	}
 
 	/**
-	 * Convert a local URL to an absolute filesystem path using ABSPATH.
+	 * Convert a local URL to an absolute filesystem path.
+	 *
+	 * Resolves paths by mapping WordPress content/plugins URLs to the
+	 * corresponding filesystem directories.
 	 *
 	 * @param string $url The local URL.
 	 * @return string Absolute file path, or empty string on failure.
 	 */
 	private function url_to_local_path( string $url ): string {
-		$path = '';
+		$asset_path = '';
 
 		if ( str_starts_with( $url, '/' ) && ! str_starts_with( $url, '//' ) ) {
-			$path = ABSPATH . ltrim( $url, '/' );
+			$asset_path = $url;
 		} else {
 			$parsed_path = wp_parse_url( $url, PHP_URL_PATH );
 			if ( ! is_string( $parsed_path ) || '' === $parsed_path ) {
 				return '';
 			}
+			$asset_path = $parsed_path;
+		}
 
-			$path = ABSPATH . ltrim( $parsed_path, '/' );
+		$asset_path       = wp_normalize_path( $asset_path );
+		$plugins_url_path = untrailingslashit( wp_normalize_path( (string) wp_parse_url( plugins_url( '/' ), PHP_URL_PATH ) ) );
+		$content_url_path = untrailingslashit( wp_normalize_path( (string) wp_parse_url( content_url( '/' ), PHP_URL_PATH ) ) );
+		$plugins_dir      = $this->get_plugins_dir_path();
+		$content_dir      = $this->get_content_dir_path();
+		$path             = '';
+
+		if ( '' !== $plugins_url_path && str_starts_with( $asset_path, $plugins_url_path . '/' ) ) {
+			$relative = ltrim( substr( $asset_path, strlen( $plugins_url_path ) ), '/' );
+			$path     = wp_normalize_path( $plugins_dir . '/' . $relative );
+		} elseif ( '' !== $content_url_path && str_starts_with( $asset_path, $content_url_path . '/' ) ) {
+			$relative = ltrim( substr( $asset_path, strlen( $content_url_path ) ), '/' );
+			$path     = wp_normalize_path( $content_dir . '/' . $relative );
+		} else {
+			return '';
 		}
 
 		$resolved = realpath( $path );
@@ -242,19 +259,77 @@ class WPHM_Asset_Analyzer {
 			return '';
 		}
 
-		$root = realpath( ABSPATH );
-		if ( false === $root ) {
-			return '';
-		}
-
 		$resolved_normalized = wp_normalize_path( $resolved );
-		$root_normalized     = wp_normalize_path( $root );
+		$plugins_normalized  = wp_normalize_path( $plugins_dir );
+		$content_normalized  = wp_normalize_path( $content_dir );
 
-		if ( ! str_starts_with( $resolved_normalized, $root_normalized ) ) {
+		if (
+			! str_starts_with( $resolved_normalized, $plugins_normalized ) &&
+			! str_starts_with( $resolved_normalized, $content_normalized )
+		) {
 			return '';
 		}
 
 		return $resolved;
+	}
+
+	/**
+	 * Extract plugin slug from an asset URL when it points to plugins directory.
+	 *
+	 * @param string $src Asset source URL.
+	 * @return string Plugin slug or empty string.
+	 */
+	private function extract_plugin_slug_from_src( string $src ): string {
+		$path             = wp_parse_url( $src, PHP_URL_PATH );
+		$plugins_url_path = untrailingslashit( wp_normalize_path( (string) wp_parse_url( plugins_url( '/' ), PHP_URL_PATH ) ) );
+
+		if ( ! is_string( $path ) || '' === $path || '' === $plugins_url_path ) {
+			return '';
+		}
+
+		$path = wp_normalize_path( $path );
+		if ( ! str_starts_with( $path, $plugins_url_path . '/' ) ) {
+			return '';
+		}
+
+		$relative = ltrim( substr( $path, strlen( $plugins_url_path ) ), '/' );
+		$parts    = explode( '/', $relative );
+
+		if ( empty( $parts[0] ) ) {
+			return '';
+		}
+
+		return sanitize_key( $parts[0] );
+	}
+
+	/**
+	 * Get plugins directory path from plugin constants.
+	 *
+	 * @return string
+	 */
+	private function get_plugins_dir_path(): string {
+		return wp_normalize_path( dirname( untrailingslashit( WPHM_PLUGIN_DIR ) ) );
+	}
+
+	/**
+	 * Resolve content directory from uploads directory, with plugin-relative fallback.
+	 *
+	 * @return string
+	 */
+	private function get_content_dir_path(): string {
+		$uploads = wp_get_upload_dir();
+
+		if ( ! empty( $uploads['basedir'] ) && is_string( $uploads['basedir'] ) ) {
+			$uploads_dir = realpath( $uploads['basedir'] );
+			if ( false !== $uploads_dir ) {
+				$content_dir = dirname( $uploads_dir );
+				if ( is_dir( $content_dir ) ) {
+					return wp_normalize_path( $content_dir );
+				}
+			}
+		}
+
+		return wp_normalize_path( dirname( $this->get_plugins_dir_path() ) );
 	}
 
 	/**

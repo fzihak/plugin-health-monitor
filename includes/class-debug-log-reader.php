@@ -3,7 +3,8 @@
  * Debug Log Reader class.
  *
  * Module 4 — Debug Log Analyzer.
- * Reads and parses WP_CONTENT_DIR/debug.log, extracting error types,
+ * Reads and parses debug.log from the WordPress content directory,
+ * extracting error types,
  * plugin attribution, and recent entries.
  *
  * @package WP_Plugin_Health_Monitor
@@ -109,12 +110,17 @@ class WPHM_Debug_Log_Reader {
 	/**
 	 * Get the validated path to the debug.log file.
 	 *
-	 * Checks file existence and validates the resolved path starts with WP_CONTENT_DIR.
+	 * Checks file existence and validates the resolved path starts with content dir.
 	 *
 	 * @return string Absolute path to debug.log, or empty string if invalid.
 	 */
 	public function get_log_path(): string {
-		$log_path = WP_CONTENT_DIR . '/debug.log';
+		$content_dir = $this->get_content_dir_path();
+		if ( '' === $content_dir ) {
+			return '';
+		}
+
+		$log_path = $content_dir . '/debug.log';
 
 		if ( ! file_exists( $log_path ) || ! is_readable( $log_path ) ) {
 			return '';
@@ -125,19 +131,59 @@ class WPHM_Debug_Log_Reader {
 			return '';
 		}
 
-		$content_dir = realpath( WP_CONTENT_DIR );
-		if ( false === $content_dir ) {
+		$content_real = realpath( $content_dir );
+		if ( false === $content_real ) {
 			return '';
 		}
 
 		$real_path_normalized   = wp_normalize_path( $real_path );
-		$content_dir_normalized = wp_normalize_path( $content_dir );
+		$content_dir_normalized = wp_normalize_path( $content_real );
 
 		if ( ! str_starts_with( $real_path_normalized, $content_dir_normalized ) ) {
 			return '';
 		}
 
 		return $real_path;
+	}
+
+	/**
+	 * Get the expected debug.log location.
+	 *
+	 * @return string
+	 */
+	public function get_expected_log_path(): string {
+		$content_dir = $this->get_content_dir_path();
+
+		if ( '' === $content_dir ) {
+			return '';
+		}
+
+		return $content_dir . '/debug.log';
+	}
+
+	/**
+	 * Resolve the WordPress content directory path.
+	 *
+	 * Uses uploads directory as primary source and a plugin-relative fallback.
+	 *
+	 * @return string
+	 */
+	private function get_content_dir_path(): string {
+		$uploads = wp_get_upload_dir();
+
+		if ( ! empty( $uploads['basedir'] ) && is_string( $uploads['basedir'] ) ) {
+			$uploads_dir = realpath( $uploads['basedir'] );
+			if ( false !== $uploads_dir ) {
+				$content_dir = dirname( $uploads_dir );
+				if ( is_dir( $content_dir ) ) {
+					return wp_normalize_path( $content_dir );
+				}
+			}
+		}
+
+		$plugins_dir = dirname( untrailingslashit( WPHM_PLUGIN_DIR ) );
+
+		return wp_normalize_path( dirname( $plugins_dir ) );
 	}
 
 	/**

@@ -95,10 +95,6 @@ class WPHM_PHP_Checker {
 			}
 		}
 
-		if ( ! function_exists( 'get_plugins' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
-		}
-
 		$results = array(
 			'plugins'          => $this->check_php_versions(),
 			'deprecated_usage' => $this->find_deprecated_usage(),
@@ -119,7 +115,7 @@ class WPHM_PHP_Checker {
 	 * @return array Array of plugin compatibility entries.
 	 */
 	public function check_php_versions(): array {
-		$all_plugins = get_plugins();
+		$all_plugins = $this->get_installed_plugins();
 		$results     = array();
 
 		foreach ( $all_plugins as $plugin_file => $plugin_data ) {
@@ -159,7 +155,8 @@ class WPHM_PHP_Checker {
 	 * @return string The required PHP version, or empty string if not found.
 	 */
 	private function get_required_php_from_readme( string $plugin_file ): string {
-		$plugin_dir  = dirname( WP_PLUGIN_DIR . '/' . $plugin_file );
+		$plugins_dir = trailingslashit( $this->get_plugins_root_dir() );
+		$plugin_dir  = dirname( $plugins_dir . ltrim( $plugin_file, '/' ) );
 		$readme_path = $plugin_dir . '/readme.txt';
 
 		if ( ! file_exists( $readme_path ) ) {
@@ -172,15 +169,15 @@ class WPHM_PHP_Checker {
 			return '';
 		}
 
-		$content_dir = realpath( WP_CONTENT_DIR );
-		if ( false === $content_dir ) {
+		$plugins_root = realpath( $this->get_plugins_root_dir() );
+		if ( false === $plugins_root ) {
 			return '';
 		}
 
 		$real_path_normalized   = wp_normalize_path( $real_path );
-		$content_dir_normalized = wp_normalize_path( $content_dir );
+		$plugins_root_normalized = wp_normalize_path( $plugins_root );
 
-		if ( ! str_starts_with( $real_path_normalized, $content_dir_normalized ) ) {
+		if ( ! str_starts_with( $real_path_normalized, $plugins_root_normalized ) ) {
 			return '';
 		}
 
@@ -213,7 +210,7 @@ class WPHM_PHP_Checker {
 	 * @return array Array of deprecated usage entries.
 	 */
 	public function find_deprecated_usage(): array {
-		$active  = get_option( 'active_plugins', array() );
+		$active  = $this->get_active_plugin_files();
 		$results = array();
 
 		if ( ! is_array( $active ) ) {
@@ -223,9 +220,17 @@ class WPHM_PHP_Checker {
 		$function_names = array_keys( self::$deprecated_functions );
 		// Build a regex pattern to match any of the deprecated function calls.
 		$pattern = '/\b(' . implode( '|', array_map( 'preg_quote', $function_names ) ) . ')\s*\(/';
+		$plugins_dir = trailingslashit( $this->get_plugins_root_dir() );
+		$plugins_root = realpath( $this->get_plugins_root_dir() );
+
+		if ( false === $plugins_root ) {
+			return $results;
+		}
+
+		$plugins_root_normalized = wp_normalize_path( $plugins_root );
 
 		foreach ( $active as $plugin_file ) {
-			$plugin_dir = dirname( WP_PLUGIN_DIR . '/' . $plugin_file );
+			$plugin_dir = dirname( $plugins_dir . ltrim( $plugin_file, '/' ) );
 
 			// Validate path.
 			$real_dir = realpath( $plugin_dir );
@@ -233,15 +238,9 @@ class WPHM_PHP_Checker {
 				continue;
 			}
 
-			$content_dir = realpath( WP_CONTENT_DIR );
-			if ( false === $content_dir ) {
-				continue;
-			}
-
 			$real_dir_normalized    = wp_normalize_path( $real_dir );
-			$content_dir_normalized = wp_normalize_path( $content_dir );
 
-			if ( ! str_starts_with( $real_dir_normalized, $content_dir_normalized ) ) {
+			if ( ! str_starts_with( $real_dir_normalized, $plugins_root_normalized ) ) {
 				continue;
 			}
 
@@ -271,7 +270,7 @@ class WPHM_PHP_Checker {
 							'plugin'        => $plugin_slug,
 							'function'      => $func_name,
 							'deprecated_in' => self::$deprecated_functions[ $func_name ] ?? '',
-							'file'          => str_replace( WP_PLUGIN_DIR . '/', '', $file ),
+							'file'          => ltrim( str_replace( trailingslashit( $plugins_root_normalized ), '', wp_normalize_path( $file ) ), '/' ),
 						);
 					}
 				}
@@ -315,5 +314,82 @@ class WPHM_PHP_Checker {
 		}
 
 		return $files;
+	}
+
+	/**
+	 * Get installed plugins data without requiring wp-admin plugin loader files.
+	 *
+	 * @return array
+	 */
+	private function get_installed_plugins(): array {
+		if ( function_exists( 'get_plugins' ) ) {
+			return get_plugins();
+		}
+
+		$plugins = array();
+		$files   = $this->get_active_plugin_files();
+		$root    = trailingslashit( $this->get_plugins_root_dir() );
+
+		foreach ( $files as $plugin_file ) {
+			$plugin_path = wp_normalize_path( $root . ltrim( $plugin_file, '/' ) );
+			if ( ! file_exists( $plugin_path ) || ! is_readable( $plugin_path ) ) {
+				continue;
+			}
+
+			$data = get_file_data(
+				$plugin_path,
+				array(
+					'Name'        => 'Plugin Name',
+					'RequiresPHP' => 'Requires PHP',
+				)
+			);
+
+			$plugins[ $plugin_file ] = array(
+				'Name'        => $data['Name'] ?? $plugin_file,
+				'RequiresPHP' => $data['RequiresPHP'] ?? '',
+			);
+		}
+
+		return $plugins;
+	}
+
+	/**
+	 * Get active plugin file list for single-site and multisite.
+	 *
+	 * @return array
+	 */
+	private function get_active_plugin_files(): array {
+		$active_plugins = get_option( 'active_plugins', array() );
+
+		if ( ! is_array( $active_plugins ) ) {
+			$active_plugins = array();
+		}
+
+		if ( is_multisite() ) {
+			$network_active = get_site_option( 'active_sitewide_plugins', array() );
+			if ( is_array( $network_active ) ) {
+				$active_plugins = array_merge( $active_plugins, array_keys( $network_active ) );
+			}
+		}
+
+		$active_plugins = array_map(
+			static function ( $plugin_file ) {
+				return is_string( $plugin_file ) ? wp_normalize_path( $plugin_file ) : '';
+			},
+			$active_plugins
+		);
+
+		$active_plugins = array_filter( $active_plugins );
+
+		return array_values( array_unique( $active_plugins ) );
+	}
+
+	/**
+	 * Get plugins root directory from plugin constants.
+	 *
+	 * @return string
+	 */
+	private function get_plugins_root_dir(): string {
+		return wp_normalize_path( dirname( untrailingslashit( WPHM_PLUGIN_DIR ) ) );
 	}
 }
