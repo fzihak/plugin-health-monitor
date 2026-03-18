@@ -208,17 +208,18 @@ wp healthmonitor log --last=50
 
 ## How the Health Score Works
 
-The score is a weighted aggregate across **five dimensions**, totaling 100 points.
+The score is a weighted aggregate across **four dimensions**, totaling 100 points.
 
 | Dimension | Weight | Description |
 |---|---|---|
-| Conflict score | 20 pts | Hook collisions and duplicate script/style handles |
-| Performance score | 25 pts | Asset count, estimated payload, DB queries, autoload size |
-| PHP compatibility score | 20 pts | Incompatible plugins and deprecated function usage |
-| Debug log score | 20 pts | Error frequency and severity in `debug.log` |
-| Asset health score | 15 pts | Duplicate fingerprinted JS/CSS files |
+| Plugin count score | 30 pts | Active plugin count impact |
+| Asset count score | 30 pts | Total enqueued JS/CSS handle count |
+| DB query score | 20 pts | Query count scoring when `SAVEQUERIES` is enabled |
+| Autoload score | 20 pts | Total autoloaded options payload |
 
 A score of **80+** is considered healthy. Below **50** indicates significant issues requiring attention.
+
+> Note: If `SAVEQUERIES` is disabled, DB query count cannot be measured and this dimension currently returns full marks.
 
 ---
 
@@ -226,7 +227,7 @@ A score of **80+** is considered healthy. Below **50** indicates significant iss
 
 > This plugin was built with security-first principles throughout.
 
-- All file reads use `WP_Filesystem` — no direct `fopen`/`fread` calls
+- Sensitive log/readme scanning uses `WP_Filesystem` (no direct `fopen`/`fread` in those modules)
 - All AJAX handlers verify nonces via `check_ajax_referer()`
 - All admin pages enforce `manage_options` capability check
 - All output escaped with `esc_html()`, `esc_attr()`, and `esc_url()`
