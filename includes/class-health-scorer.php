@@ -216,15 +216,21 @@ class WPHM_Health_Scorer {
 				)
 			);
 
-			$placeholders = implode( ', ', array_fill( 0, count( $autoload_values ), '%s' ) );
-
-			$query = $wpdb->prepare(
-				"SELECT SUM(LENGTH(option_value)) FROM {$wpdb->options} WHERE autoload IN ($placeholders)",
-				$autoload_values
-			);
+			$autoload_values = array_slice( array_unique( $autoload_values ), 0, 6 );
+			$autoload_values = array_pad( $autoload_values, 6, '' );
 
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-			$result = $wpdb->get_var( $query );
+			$result = $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT SUM(LENGTH(option_value)) FROM {$wpdb->options} WHERE autoload IN (%s, %s, %s, %s, %s, %s)",
+					$autoload_values[0],
+					$autoload_values[1],
+					$autoload_values[2],
+					$autoload_values[3],
+					$autoload_values[4],
+					$autoload_values[5]
+				)
+			);
 			wp_cache_set( $cache_key, $result, 'wphm', HOUR_IN_SECONDS );
 		}
 
