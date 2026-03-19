@@ -1,0 +1,33 @@
+name: PHP CodeSniffer
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  phpcs:
+    name: Run PHP_CodeSniffer
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          tools: cs2pr
+
+      - name: Require WordPress Coding Standards
+        run: |
+          composer global require "squizlabs/php_codesniffer=*"
+          composer global require "wp-coding-standards/wpcs=*"
+          $(composer global config bin-dir --absolute)/phpcs --config-set installed_paths $(composer global config home --absolute)/vendor/wp-coding-standards/wpcs
+
+      - name: Run PHPCS
+        run: $(composer global config bin-dir --absolute)/phpcs --standard=WordPress --extensions=php --ignore=*/vendor/*,*/node_modules/*,*/tests/* . --report=checkstyle | cs2pr

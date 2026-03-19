@@ -261,29 +261,7 @@ All PHP must follow [WordPress Coding Standards](https://developer.wordpress.org
 
 ## Changelog
 
-### [1.0.0] — 2026-03-18 (Review Update)
-
-**WordPress.org review fixes (same release version).**
-
-- Removed inline JavaScript redirect from the admin documentation page and replaced it with a standard admin link/button.
-- Removed direct loading of `wp-admin/includes/plugin.php`.
-- Refactored path/directory resolution to use WordPress helper-based locations instead of hardcoded internal constants.
-- Updated debug log path handling to use centralized resolver methods.
-- Updated autoload-size SQL handling to use PHPCS-compliant prepared query placeholders.
-
-### [1.0.0] — 2026-03-05
-
-**Initial public release.**
-
-- 🔍 Plugin Conflict Detector — hook collisions + duplicate script/style handles
-- ⚡ Performance Insight Panel — DB queries, asset count, autoload size, 0–100 Health Score
-- 🐘 PHP Compatibility Checker — per-plugin PHP validation + deprecated function scan
-- 📋 Debug Log Analyzer — fatal/warning/notice grouping by top-offending plugin
-- 🧬 Duplicate Asset Detector — md5 fingerprinting across JS/CSS handles
-- 📄 Health Report Generator — JSON/TXT download + print-to-PDF
-- 🖥️ Full WP-CLI command suite (`scan`, `score`, `conflicts`, `report`, `log`)
-- Custom radar SVG admin menu icon
-- Automated Plugin Check scan: ✅ PASS
+Please see the [CHANGELOG.md](CHANGELOG.md) file for a complete history of changes.
 
 ---
 
