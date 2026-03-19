@@ -1,6 +1,6 @@
 === Health Radar ===
 Contributors: fzihak
-Tags: plugin health monitor, plugin conflicts, performance audit, debug log analyzer, WordPress security, plugin management, site optimization
+Tags: performance, debug log, php compatibility, diagnostics, site health
 Requires at least: 6.3
 Tested up to: 6.9
 Requires PHP: 8.1
@@ -8,7 +8,7 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-**WordPress Plugin Health Monitor & Conflict Detector** — Audit plugin conflicts, detect performance issues, verify PHP compatibility, and analyze debug errors from your WordPress admin dashboard.
+Detect plugin conflicts, performance issues, PHP compatibility risks, and debug log errors from your WordPress dashboard.
 
 == Description ==
 
