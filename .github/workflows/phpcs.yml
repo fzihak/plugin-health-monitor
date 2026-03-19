@@ -29,4 +29,4 @@ jobs:
           composer global require "wp-coding-standards/wpcs:^3.0"
 
       - name: Run PHPCS
-        run: $(composer global config bin-dir --absolute)/phpcs --standard=WordPress --extensions=php --ignore=*/vendor/*,*/node_modules/*,*/tests/* . --report=checkstyle | cs2pr
+        run: $(composer global config bin-dir --absolute)/phpcs --standard=phpcs.xml.dist --report=checkstyle | cs2pr
