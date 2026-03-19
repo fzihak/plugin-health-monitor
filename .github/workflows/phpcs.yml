@@ -25,6 +25,7 @@ jobs:
 
       - name: Require WordPress Coding Standards
         run: |
+          composer global config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
           composer global require "wp-coding-standards/wpcs:^3.0"
           $(composer global config bin-dir --absolute)/phpcs --config-set installed_paths $(composer global config home --absolute)/vendor/wp-coding-standards/wpcs
 
